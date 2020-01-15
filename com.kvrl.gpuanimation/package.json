@@ -1,0 +1,16 @@
+{
+  "name": "com.kvrl.gpuanimation",
+  "displayName": "GPU based animation system",
+  "version": "0.0.1-preview.13",
+  "unity": "2019.3",
+  "unityRelease": "0f1",
+  "description": "Forked from https://github.com/joeante/Unity.GPUAnimation to add custom MaterialProperty animation",
+  "dependencies": {
+    "com.unity.entities": "0.0.12-preview.33"
+  },
+  "keywords": [
+    "entities",
+    "unity",
+    "animation"
+  ]
+}

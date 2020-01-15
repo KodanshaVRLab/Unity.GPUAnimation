@@ -51,6 +51,12 @@ namespace Unity.GPUAnimation
 				
 			};
 			manager.AddSharedComponentData(entity, renderCharacter);
+
+            //ScrubMaterialPropertyAuthor sm;
+            //if (characterRig.TryGetComponent<ScrubMaterialPropertyAuthor>(out sm))
+            //{
+            //    manager.AddComponentData(entity, )
+            //}
 		}
 	}
     public class ConvertToGPUCharacter : MonoBehaviour, IConvertGameObjectToEntity

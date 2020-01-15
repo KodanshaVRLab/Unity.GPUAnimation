@@ -21,6 +21,8 @@ namespace Unity.GPUAnimation
         private Material material;
 
         private Mesh mesh;
+
+        private MaterialPropertyBlock props = new MaterialPropertyBlock();
         
         public unsafe InstancedSkinningDrawer(Material srcMaterial, Mesh meshToDraw, AnimationTextures animTexture)
         {
@@ -49,6 +51,16 @@ namespace Unity.GPUAnimation
             if (argsBuffer != null) argsBuffer.Dispose();
             if (objectToWorldBuffer != null) objectToWorldBuffer.Dispose();
             if (textureCoordinatesBuffer != null) textureCoordinatesBuffer.Dispose();
+        }
+
+        public void SetFloatArray(int PropertyID, NativeArray<float> Value)
+        {
+            SetFloatArray(PropertyID, Value.ToArray());
+        }
+
+        public void SetFloatArray(int PropertyID, float[] Value)
+        {
+            props.SetFloatArray(PropertyID, Value);
         }
         
         public void Draw(NativeArray<float3> TextureCoordinates, NativeArray<float4x4> ObjectToWorld, ShadowCastingMode shadowCastingMode, bool receiveShadows)
@@ -88,7 +100,7 @@ namespace Unity.GPUAnimation
             indirectArgs[1] = (uint)count;
             argsBuffer.SetData(indirectArgs);
 
-            Graphics.DrawMeshInstancedIndirect(mesh, 0, material, new Bounds(Vector3.zero, 1000000 * Vector3.one), argsBuffer, 0, new MaterialPropertyBlock(), shadowCastingMode, receiveShadows);
+            Graphics.DrawMeshInstancedIndirect(mesh, 0, material, new Bounds(Vector3.zero, 1000000 * Vector3.one), argsBuffer, 0, props, shadowCastingMode, receiveShadows);
         }
     }
 }

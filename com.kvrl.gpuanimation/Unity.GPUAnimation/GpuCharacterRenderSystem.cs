@@ -175,7 +175,12 @@ namespace Unity.GPUAnimation
 	    private Dictionary<RenderCharacter, InstancedSkinningDrawer> _Drawers = new Dictionary<RenderCharacter, InstancedSkinningDrawer>();
 
 	    private EntityQuery m_Characters;
+        private static int PropertyID = -1;
 
+        public static void SetProperty(string prop)
+        {
+            PropertyID = Shader.PropertyToID(prop);
+        }
 
 	    protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
@@ -195,19 +200,33 @@ namespace Unity.GPUAnimation
 			        _Drawers.Add(character, drawer);
 		        }
 		        
-				m_Characters.SetFilter(character);
+				m_Characters.SetSharedComponentFilter(character);
 
 				Profiler.BeginSample("ExtractState");
-				JobHandle jobA, jobB;
+				JobHandle jobA, jobB, jobC;
 		        var coords = m_Characters.ToComponentDataArray<AnimationTextureCoordinate>(Allocator.TempJob, out jobA);
 		        var localToWorld = m_Characters.ToComponentDataArray<LocalToWorld>(Allocator.TempJob, out jobB);
-		        JobHandle.CompleteAll(ref jobA, ref jobB);
+                var props = m_Characters.ToComponentDataArray<ScrubMaterialProperty>(Allocator.TempJob, out jobC);
+		        JobHandle.CompleteAll(ref jobA, ref jobB, ref jobC);
 		        Profiler.EndSample();
-		        
+
+                float[] propVals = new float[props.Length];
+                for (int i = 0; i < props.Length; ++i)
+                {
+                    var prop = props[i];
+                    propVals[i] = prop.Value; // (float)i / (float)props.Length;
+                }
+
+                if (PropertyID != -1)
+                {
+                    drawer.SetFloatArray(PropertyID, propVals);
+                }
+                
 		        drawer.Draw(coords.Reinterpret_Temp<AnimationTextureCoordinate, float3>(), localToWorld.Reinterpret_Temp<LocalToWorld, float4x4>(), character.CastShadows, character.ReceiveShadows);
 		        
 		        coords.Dispose();
 		        localToWorld.Dispose();
+                props.Dispose();
 	        }
 
 	        return inputDeps;
@@ -215,7 +234,8 @@ namespace Unity.GPUAnimation
 
         protected override void OnCreate()
         {
-	        m_Characters = GetEntityQuery(ComponentType.ReadOnly<RenderCharacter>(), ComponentType.ReadOnly<GPUAnimationState>(), ComponentType.ReadOnly<LocalToWorld>(), ComponentType.ReadOnly<AnimationTextureCoordinate>());
+            m_Characters = GetEntityQuery(ComponentType.ReadOnly<RenderCharacter>(), ComponentType.ReadOnly<GPUAnimationState>(), ComponentType.ReadOnly<LocalToWorld>(), ComponentType.ReadOnly<AnimationTextureCoordinate>(), ComponentType.ReadOnly<ScrubMaterialProperty>());
+            PropertyID = Shader.PropertyToID("_Value");
         }
 
         protected override void OnDestroy()

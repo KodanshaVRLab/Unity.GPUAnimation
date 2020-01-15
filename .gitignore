@@ -7,3 +7,6 @@ GPUAnimationExamples/obj
 *.sln
 *.csproj
 *.DS_Store
+SteamVR*
+[Bb]uild
+.vs
