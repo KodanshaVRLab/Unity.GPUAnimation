@@ -6,6 +6,18 @@ using UnityEngine;
 
 namespace Unity.GPUAnimation
 {
+    /// <summary>
+    /// A Dynamic Buffer with ScrubAnim data
+    /// </summary>
+    [InternalBufferCapacity(100)]
+    public struct ScrubDataBufferElement : IBufferElementData
+    {
+        public float Offset;
+        public float Duration;
+        public int ClipIndex;
+        public float2 ClampRange;
+    }
+
     public class ScrubAnimAuthoring : MonoBehaviour, IConvertGameObjectToEntity
     {
         [Range(0, 1)]
@@ -14,6 +26,7 @@ namespace Unity.GPUAnimation
         public float offset = 0f;
         [Range(0, 1)]
         public float duration = 1f;
+        public Vector2 clampRange = new Vector2(0f, 1f);
         public int ClipIndex = 0;
         public Scrubber scrubber;
 
@@ -29,7 +42,8 @@ namespace Unity.GPUAnimation
                 {
                     Offset = offset,
                     Duration = duration,
-                    ClipIndex = this.ClipIndex
+                    ClipIndex = this.ClipIndex,
+                    ClampRange = clampRange
                 };
             }
         }
@@ -40,9 +54,9 @@ namespace Unity.GPUAnimation
             {
                 ClipIndex = ClipIndex,
                 Time = time,
-                IsFirstFrame = true,
                 Offset = offset,
-                Duration = duration
+                Duration = duration,
+                ClampRange = math.saturate(clampRange)
             });
 
             this.entity = entity;

@@ -70,7 +70,7 @@ namespace Unity.GPUAnimation
                         Time = 0,
                         Offset = s.Offset,
                         Duration = s.Duration,
-                        IsFirstFrame = true
+                        ClampRange = s.ClampRange
                     });
                     CommandBuffer.SetComponent(index, instance, new ScrubMaterialProperty
                     {

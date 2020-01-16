@@ -45,6 +45,7 @@ MonoBehaviour:
   time: 0
   offset: 0
   duration: 1
+  clampRange: {x: 0, y: 1}
   ClipIndex: 0
   scrubber: {fileID: 0}
   dataOnly: 0

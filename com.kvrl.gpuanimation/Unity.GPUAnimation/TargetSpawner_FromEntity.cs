@@ -58,15 +58,6 @@ public struct TransformBufferElement : IBufferElementData
     public float Scale;
 }
 
-/// <summary>
-/// A Dynamic Buffer with ScrubAnim data
-/// </summary>
-[InternalBufferCapacity(100)]
-public struct ScrubDataBufferElement : IBufferElementData
-{
-    public float Offset;
-    public float Duration;
-    public int ClipIndex;
-}
+
 
 
