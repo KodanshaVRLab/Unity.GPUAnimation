@@ -12,6 +12,7 @@ struct ScrubAnim : IComponentData
     public float Offset;
     public float Duration;
     public float2 ClampRange;
+    public bool Loop;
 }
 
 [UpdateInGroup(typeof(PresentationSystemGroup))]
@@ -28,8 +29,13 @@ public class SrubAnimSystem : JobComponentSystem
             ref var clips = ref animstate.AnimationClipSet.Value.Clips;
             if ((uint)animstate.AnimationClipIndex < (uint)clips.Length)
             {
-                animstate.Time = math.clamp((scrub.Time - scrub.Offset) / scrub.Duration, scrub.ClampRange.x, scrub.ClampRange.y);
-                //animstate.Time = math.frac(animstate.Time + 0.01f);
+                animstate.Time = (scrub.Time - scrub.Offset) / scrub.Duration;
+                
+                if (scrub.Loop) {
+                    animstate.Time = math.frac(animstate.Time + 0.01f);
+                } else {
+                    animstate.Time = math.clamp(animstate.Time, scrub.ClampRange.x, scrub.ClampRange.y);
+                }
             }
             else
             {

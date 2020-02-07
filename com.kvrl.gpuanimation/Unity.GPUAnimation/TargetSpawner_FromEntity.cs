@@ -17,7 +17,7 @@ public struct ValidFloat3
     public bool Valid;
 }
 
-[InternalBufferCapacity(100)]
+[InternalBufferCapacity(150)]
 public struct PositionBufferElement : IBufferElementData
 {
     public static implicit operator float3(PositionBufferElement e) { return e.Value; }
@@ -36,7 +36,7 @@ public struct PositionBufferElement : IBufferElementData
 /// A DynamicBuffer is templated, so what we gotta do is define the struct that will contain the data we need.
 /// The struct must implement IBufferElementData
 /// </remarks>
-[InternalBufferCapacity(100)] // Mark the buffer as containing max 100 elements
+[InternalBufferCapacity(150)] // Mark the buffer as containing max 100 elements
 public struct TransformBufferElement : IBufferElementData
 {
     // Define implicit conversions for convenience

@@ -210,6 +210,8 @@ namespace Unity.GPUAnimation
 		        JobHandle.CompleteAll(ref jobA, ref jobB, ref jobC);
 		        Profiler.EndSample();
 
+                //PropertyID = props[0].PropertyID;
+
                 float[] propVals = new float[props.Length];
                 for (int i = 0; i < props.Length; ++i)
                 {
@@ -217,6 +219,7 @@ namespace Unity.GPUAnimation
                     propVals[i] = prop.Value; // (float)i / (float)props.Length;
                 }
 
+				SetProperty("_Growth");
                 if (PropertyID != -1)
                 {
                     drawer.SetFloatArray(PropertyID, propVals);
@@ -235,7 +238,7 @@ namespace Unity.GPUAnimation
         protected override void OnCreate()
         {
             m_Characters = GetEntityQuery(ComponentType.ReadOnly<RenderCharacter>(), ComponentType.ReadOnly<GPUAnimationState>(), ComponentType.ReadOnly<LocalToWorld>(), ComponentType.ReadOnly<AnimationTextureCoordinate>(), ComponentType.ReadOnly<ScrubMaterialProperty>());
-            PropertyID = Shader.PropertyToID("_Value");
+            PropertyID = Shader.PropertyToID("_Growth");
         }
 
         protected override void OnDestroy()

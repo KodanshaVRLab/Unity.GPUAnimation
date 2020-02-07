@@ -16,6 +16,7 @@ namespace Unity.GPUAnimation
         public float Duration;
         public int ClipIndex;
         public float2 ClampRange;
+        public bool Loop;
     }
 
     public class ScrubAnimAuthoring : MonoBehaviour, IConvertGameObjectToEntity
@@ -28,9 +29,11 @@ namespace Unity.GPUAnimation
         public float duration = 1f;
         public Vector2 clampRange = new Vector2(0f, 1f);
         public int ClipIndex = 0;
-        public Scrubber scrubber;
+        public bool loop = true;
 
         public bool dataOnly = false;
+
+        public Scrubber scrubber;
 
         Entity entity;
 
@@ -43,7 +46,8 @@ namespace Unity.GPUAnimation
                     Offset = offset,
                     Duration = duration,
                     ClipIndex = this.ClipIndex,
-                    ClampRange = clampRange
+                    ClampRange = clampRange,
+                    Loop = loop
                 };
             }
         }
@@ -56,7 +60,8 @@ namespace Unity.GPUAnimation
                 Time = time,
                 Offset = offset,
                 Duration = duration,
-                ClampRange = math.saturate(clampRange)
+                ClampRange = math.saturate(clampRange),
+                Loop = loop
             });
 
             this.entity = entity;

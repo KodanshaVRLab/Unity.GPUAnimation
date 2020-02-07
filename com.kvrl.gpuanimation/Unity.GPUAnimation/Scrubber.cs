@@ -9,7 +9,7 @@ namespace Unity.GPUAnimation
 
     public class Scrubber : MonoBehaviour
     {
-        [Range(0, 1)]
+        //[Range(0, 1)]
         public float time = 0f;
         public bool auto = false;
 

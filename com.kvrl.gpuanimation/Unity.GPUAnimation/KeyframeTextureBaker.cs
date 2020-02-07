@@ -278,6 +278,7 @@ namespace Unity.GPUAnimation
 			newMesh.vertices = vertices;
 			newMesh.uv2 = boneIds;
 			newMesh.uv3 = boneInfluences;
+			newMesh.colors = originalMesh.colors;
 
 			return newMesh;
 		}
