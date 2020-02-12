@@ -177,6 +177,8 @@ namespace Unity.GPUAnimation
 	    private EntityQuery m_Characters;
         private static int PropertyID = -1;
 
+		public static bool RenderingEnabled = false;
+
         public static void SetProperty(string prop)
         {
             PropertyID = Shader.PropertyToID(prop);
@@ -184,6 +186,10 @@ namespace Unity.GPUAnimation
 
 	    protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
+			if (!RenderingEnabled) {
+				return inputDeps;
+			}
+			
 	        _Characters.Clear();
 	        EntityManager.GetAllUniqueSharedComponentData(_Characters);
 

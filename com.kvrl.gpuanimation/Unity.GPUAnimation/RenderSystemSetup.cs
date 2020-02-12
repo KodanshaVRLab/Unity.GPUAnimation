@@ -11,6 +11,7 @@ namespace Unity.GPUAnimation
 
         public Scrubber animationScrubber;
         public Scrubber propertyScrubber;
+        public bool renderingEnabled = true;
 
         public string propertyName = "_Value";
 
@@ -39,7 +40,7 @@ namespace Unity.GPUAnimation
         // Update is called once per frame
         void Update()
         {
-
+            GpuCharacterRenderSystem.RenderingEnabled = renderingEnabled;
         }
     }
 }
