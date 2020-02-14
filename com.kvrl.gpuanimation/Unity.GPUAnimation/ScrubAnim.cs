@@ -27,14 +27,22 @@ public class SrubAnimSystem : JobComponentSystem
             animstate.AnimationClipIndex = scrub.ClipIndex;
 
             ref var clips = ref animstate.AnimationClipSet.Value.Clips;
-            if ((uint)animstate.AnimationClipIndex < (uint)clips.Length)
+            int idx = animstate.AnimationClipIndex;
+            if (idx < clips.Length)
             {
                 animstate.Time = (scrub.Time - scrub.Offset) / scrub.Duration;
                 
+                // Unity's core system handles Time as absolute, not normalized!
+                // if (scrub.Loop) {
+                //     animstate.Time = math.frac(animstate.Time + 0.01f);
+                // } else {
+                //     animstate.Time = math.clamp(animstate.Time, scrub.ClampRange.x, scrub.ClampRange.y);
+                // }
+
+                // HACK: For whatever reason core isn't reading Clip loop so let's loop ourselves?
                 if (scrub.Loop) {
-                    animstate.Time = math.frac(animstate.Time + 0.01f);
-                } else {
-                    animstate.Time = math.clamp(animstate.Time, scrub.ClampRange.x, scrub.ClampRange.y);
+                    float len = clips[idx].AnimationLength;
+                    animstate.Time = Mathf.Repeat(animstate.Time, len);
                 }
             }
             else
