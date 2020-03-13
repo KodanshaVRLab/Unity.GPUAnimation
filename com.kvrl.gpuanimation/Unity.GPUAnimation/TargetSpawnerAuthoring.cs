@@ -45,6 +45,11 @@ namespace Unity.GPUAnimation
                 t = Targets[i];
                 //pos.Add(t.position);
 
+                if (!t.gameObject.activeSelf)
+                {
+                    continue;
+                }
+
                 transforms.Add(t);
 
                 if (t.TryGetComponent<ScrubAnimAuthoring>(out s))
