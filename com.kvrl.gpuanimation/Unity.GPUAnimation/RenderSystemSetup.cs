@@ -42,5 +42,11 @@ namespace Unity.GPUAnimation
         {
             GpuCharacterRenderSystem.RenderingEnabled = renderingEnabled;
         }
+
+        private void OnDestroy()
+        {
+            // Turn off entity rendering - in case film is reset while needles are active
+            GpuCharacterRenderSystem.RenderingEnabled = false; // wey ya
+        }
     }
 }
